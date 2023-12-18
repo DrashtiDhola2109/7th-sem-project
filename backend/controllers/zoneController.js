@@ -3,7 +3,8 @@ const { Zone, Area,Route } = require('../models/Zoneschema');
 
 async function createZone(req, res) {
     const zoneName = req.body.zoneName;
-    const newZone = new Zone({ zoneName });
+    const zoneId=req.body.zoneId;
+    const newZone = new Zone({ zoneId,zoneName });
     await newZone.save()
         .then(() => {
             console.log("Zone added successfully!!!");
@@ -19,7 +20,7 @@ async function createZone(req, res) {
 async function deleteZone(req, res) {
     const zid = req.params.id;
     console.log(zid);
-    await Zone.findByIdAndDelete(zid)
+    await Zone.deleteOne({zoneId:zid})
         .then((deletedzone) => {
             if (!deletedzone) {
                 // Category with the given ID was not found
@@ -56,14 +57,10 @@ async function getZone(req, res) {
 
 async function updateZone(req, res) {
     const zid = req.params.id;
-    const { zoneName } = req.body;
-  
+    const  zoneName = req.body.zoneName;
+    console.log(zid);  
     try {
-      const updatedZone = await Zone.findByIdAndUpdate(
-        zid,
-        { zoneName},
-        { new: true } // This option returns the updated category
-      );
+      const updatedZone = await Zone.updateOne({zoneId:zid},{zoneName:zoneName});
   
       if (!updatedZone) {
         return res.status(404).json({ error: 'zone not found' });
@@ -83,14 +80,17 @@ async function updateZone(req, res) {
   //Area
 
   async function CreateArea(req, res) {
-    Zone.findOne({ zonename: req.body.zoneName })
+    
+    Zone.findOne({ zoneName: req.body.zoneName })
         .then(zone => {
             if (!zone) {
                 res.json('zone not found');
             }
             else {
-                const areaname = req.body.AreaName;
-                const newarea = new Area({ areaname, zoneId: zone.zoneId});
+            
+                const AreaName = req.body.AreaName;
+                const AreaId = req.body.AreaId;
+                const newarea = new Area({ AreaId,AreaName, zoneId: zone.zoneId});
                 newarea.save();
                 res.status(201).json({ Data: { newarea }, Result: { Code: 201, Message: "area added successfully!", Cause: null } });
             }
@@ -101,15 +101,12 @@ async function updateZone(req, res) {
 }
 async function deletearea(req, res) {
     const aid = req.params.id;
-    console.log(aid);
-    await Area.findByIdAndDelete(aid)
+    
+    await Area.deleteOne({AreaId:aid})
         .then((deletedarea) => {
             if (!deletedarea) {
-                
                 return res.status(404).json({ error: 'area not found' });
             }
-
-
             console.log("area deleted successfully!!!");
             res.status(200).json({ Result: { Code: 200, Message: "area deleted successfully!", Cause: null } });
 
@@ -123,8 +120,8 @@ async function deletearea(req, res) {
 
 async function getAllArea(req, res) {
     try {
-        const areadata = await Area.find().populate('zoneId'); // Populate the 'categoryID' field
-
+        const areadata = await Area.find(); // Populate the 'categoryID' field
+        const zoneName = await Zone.find
         if (!areadata) {
             return res.status(404).json({ error: 'No area found' });
         }
@@ -132,9 +129,9 @@ async function getAllArea(req, res) {
         // Now, map the subcategories to replace categoryID with the relative category name
         const areawithzone = areadata.map(area => {
             return {
-                _id: area._id,
+                AreaId : area.AreaId,
                 AreaName: area.AreaName,
-                ZoneName: area.zoneId.ZoneName // Use 'categoryID' to access the populated category data
+                zoneName: area.zoneId.zoneName // Use 'categoryID' to access the populated category data
             };
         });
 

@@ -18,6 +18,18 @@ router.get('/subcategories',categoryController.getAllSubcategories);
 router.put('/subcategories/:id', categoryController.updateSubcategory);
 
 router.post('/addzone', zoneController.createZone);
+router.post('/addarea',zoneController.CreateArea);
+router.post('/addroute',zoneController.createRoute);
+router.get('/zone',zoneController.getZone);
+router.get('/area',zoneController.getAllArea);
+router.get('/route',zoneController.getAllRoute);
+router.put('/zone/:id',zoneController.updateZone);
+router.put('/area/:id',zoneController.updateZone);
+router.put('/route/:id',zoneController.updateroute);
+router.delete('/zone/:id',zoneController.deleteZone);
+router.delete('/area/:id',zoneController.deletearea);
+router.delete('/route/:id',zoneController.deleteroute);
+
 
 
 module.exports = router;
