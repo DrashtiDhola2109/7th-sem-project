@@ -1,5 +1,6 @@
 var express = require('express');
 const  categoryController  = require('../controllers/categoryControllers');
+const zoneController = require('../controllers/zoneController');
 var router = express.Router();
 
 /* GET users listing. */
@@ -15,5 +16,8 @@ router.delete('/categories/:id', categoryController.deleteCategory);
 router.delete('/subcategories/:id', categoryController.deleteSubCategory);
 router.get('/subcategories',categoryController.getAllSubcategories);
 router.put('/subcategories/:id', categoryController.updateSubcategory);
+
+router.post('/addzone', zoneController.createZone);
+
 
 module.exports = router;
