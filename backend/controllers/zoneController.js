@@ -3,8 +3,8 @@ const { Zone, Area,Route } = require('../models/Zoneschema');
 
 async function createZone(req, res) {
     const zoneName = req.body.zoneName;
-    const zoneId=req.body.zoneId;
-    const newZone = new Zone({ zoneId,zoneName });
+    //const zoneId=req.body.zoneId;
+    const newZone = new Zone({ zoneName });
     await newZone.save()
         .then(() => {
             console.log("Zone added successfully!!!");
@@ -19,8 +19,8 @@ async function createZone(req, res) {
 
 async function deleteZone(req, res) {
     const zid = req.params.id;
-    console.log(zid);
-    await Zone.deleteOne({zoneId:zid})
+    
+    await Zone.findByIdAndDelete(zid)
         .then((deletedzone) => {
             if (!deletedzone) {
                 // Category with the given ID was not found
@@ -58,10 +58,13 @@ async function getZone(req, res) {
 async function updateZone(req, res) {
     const zid = req.params.id;
     const  zoneName = req.body.zoneName;
-    console.log(zid);  
+    //console.log(zid);  
     try {
-      const updatedZone = await Zone.updateOne({zoneId:zid},{zoneName:zoneName});
-  
+        const updatedZone = await Zone.findByIdAndUpdate(
+          zid,
+          { zoneName },
+          { new: true } // This option returns the updated category
+        );
       if (!updatedZone) {
         return res.status(404).json({ error: 'zone not found' });
       }
@@ -87,10 +90,9 @@ async function updateZone(req, res) {
                 res.json('zone not found');
             }
             else {
-            
                 const AreaName = req.body.AreaName;
-                const AreaId = req.body.AreaId;
-                const newarea = new Area({ AreaId,AreaName, zoneId: zone.zoneId});
+                //const AreaId = req.body.AreaId;
+                const newarea = new Area({ AreaName, zoneId: zone.id});
                 newarea.save();
                 res.status(201).json({ Data: { newarea }, Result: { Code: 201, Message: "area added successfully!", Cause: null } });
             }
@@ -99,10 +101,11 @@ async function updateZone(req, res) {
             console.error('could not add area' + " " + error.message);
         });
 }
+
 async function deletearea(req, res) {
     const aid = req.params.id;
     
-    await Area.deleteOne({AreaId:aid})
+    await Area.findByIdAndDelete(aid)
         .then((deletedarea) => {
             if (!deletedarea) {
                 return res.status(404).json({ error: 'area not found' });
@@ -120,16 +123,15 @@ async function deletearea(req, res) {
 
 async function getAllArea(req, res) {
     try {
-        const areadata = await Area.find(); // Populate the 'categoryID' field
-        const zoneName = await Zone.find
+        const areadata = await Area.find().populate('zoneId'); // Populate the 'categoryID' field
+        console.log(areadata);
         if (!areadata) {
             return res.status(404).json({ error: 'No area found' });
         }
-
         // Now, map the subcategories to replace categoryID with the relative category name
         const areawithzone = areadata.map(area => {
             return {
-                AreaId : area.AreaId,
+                _id : area._id,
                 AreaName: area.AreaName,
                 zoneName: area.zoneId.zoneName // Use 'categoryID' to access the populated category data
             };
@@ -144,10 +146,12 @@ async function getAllArea(req, res) {
 
 async function updatearea(req, res) {
     const aid = req.params.id;
-    const { AreaName, ZoneName } = req.body;
+    const { AreaName, zoneName } = req.body;
+
+    console.log(AreaName,zoneName);
 
     try {
-        const zone = await Zone.findOne({ name: ZoneName });
+        const zone = await Zone.findOne({ zoneName: zoneName });
 
         if (!zone) {
             return res.status(404).json({ error: 'zone not found' });
@@ -155,7 +159,7 @@ async function updatearea(req, res) {
 
         const updatearea = await Area.findByIdAndUpdate(
             aid,
-            { AreaName, zoneId : zone.zoneId }, 
+            { AreaName, zoneId : zone._id }, 
             { new: true } 
         );
 
@@ -166,7 +170,7 @@ async function updatearea(req, res) {
         // Include categoryName in the response
         const responseData = {
             updatearea,
-            ZoneName, // Include the categoryName in the response
+            zoneName, // Include the categoryName in the response
         };
 
 
@@ -183,14 +187,14 @@ async function updatearea(req, res) {
 //route
 
 async function createRoute(req, res) {
-    Area.findOne({ AreaNmae: req.body.Area })
+    Area.findOne({ AreaName: req.body.AreaName})
         .then(area => {
             if (!area) {
                 res.json('area not found');
             }
             else {
-                const routename = req.body.RouteName;
-                const newroute = new Route({ routename, AreaId: area.AreaId});
+                const RouteName = req.body.RouteName;
+                const newroute = new Route({ RouteName, AreaId: area.id});
                 newroute.save();
                 res.status(201).json({ Data: { newroute }, Result: { Code: 201, Message: "route added successfully!", Cause: null } });
             }
@@ -209,12 +213,8 @@ async function deleteroute(req, res) {
                 
                 return res.status(404).json({ error: 'route not found' });
             }
-
-
             console.log("route deleted successfully!!!");
             res.status(200).json({ Result: { Code: 200, Message: "route deleted successfully!", Cause: null } });
-
-
         })
         .catch((error) => {
             res.status(500).json({ error: 'Could not delete route' });
@@ -247,28 +247,21 @@ async function getAllRoute(req, res) {
 }
 
 async function updateroute(req, res) {
-    const rid = req.params.id;
+    const aid = req.params.id;
     const { RouteName, AreaName } = req.body;
-
     try {
-        // Find the corresponding Category document by categoryName
-        const area = await Area.findOne({ name: AreaName });
-
+        const area = await Area.findOne({ AreaName: AreaName });
         if (!area) {
             return res.status(404).json({ error: 'area not found' });
         }                                                             
-
-        // Update the Subcategory with the new values and categoryId
         const updateroute = await Route.findByIdAndUpdate(
-            rid,
-            { RouteName, AreaId : area.AreaId }, // Update categoryId
-            { new: true } // This option returns the updated subcategory
+            aid,
+            { RouteName, AreaId : area._id }, 
+            { new: true } 
         );
-
         if (!updateroute) {
             return res.status(404).json({ error: 'route not found' });
         }
-
         // Include categoryName in the response
         const responseData = {
             updateroute,

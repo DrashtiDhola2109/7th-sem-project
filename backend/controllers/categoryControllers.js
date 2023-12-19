@@ -166,7 +166,6 @@ async function getAllSubcategories(req, res) {
 async function updateSubcategory(req, res) {
     const scId = req.params.id;
     const { displayName, name, categoryName } = req.body;
-
     try {
         // Find the corresponding Category document by categoryName
         const category = await Category.findOne({ name: categoryName });
@@ -174,7 +173,6 @@ async function updateSubcategory(req, res) {
         if (!category) {
             return res.status(404).json({ error: 'Category not found' });
         }                                                             
-
         // Update the Subcategory with the new values and categoryId
         const updatedSubcategory = await Subcategory.findByIdAndUpdate(
             scId,
