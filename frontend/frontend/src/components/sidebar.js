@@ -20,6 +20,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import GroupIcon from '@mui/icons-material/Group';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import InsertForm from './insertForm';
 
 const drawerWidth = 240;
 
@@ -110,8 +111,37 @@ export default function MiniDrawer() {
     switch (selected) {
       case 'Category':
         return (
+            <InsertForm />
+        );
+      case 'Subcategory':
+        return (
           <Typography variant="h6" noWrap component="div">
-            Category Content
+            Subcategory Content
+          </Typography>
+        );
+      case 'Orders':
+        return (
+          <Typography variant="h6" noWrap component="div">
+            Orders Content
+          </Typography>
+        );
+      case 'Employees':
+        return (
+          <Typography variant="h6" noWrap component="div">
+            Employees Content
+          </Typography>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const getContentForOptionDisplay = (selected) => {
+    switch (selected) {
+      case 'Category':
+        return (
+            <Typography variant="h6" noWrap component="div">
+            Category
           </Typography>
         );
       case 'Subcategory':
@@ -141,7 +171,7 @@ export default function MiniDrawer() {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ backgroundColor: '#F0A04B'}}>
+        <Toolbar sx={{ backgroundColor: '#2D4059'}}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -150,23 +180,24 @@ export default function MiniDrawer() {
             sx={{
               marginRight: 5,
               ...(open && { display: 'none' }),
+              
             }}
           >
             <MenuIcon />
           </IconButton>
           {/* <Typography variant="h6" noWrap component="div"> */}
-          {getContentForOption(selectedOption)}
+          {getContentForOptionDisplay(selectedOption)}
           {/* </Typography> */}
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
+      <Drawer variant='permanent' open={open}>
+        <DrawerHeader sx={{ backgroundColor: '#2D4059'}}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List sx={{ backgroundColor: '#2D4059',color: '#EEEEEE',}}>
           {['Category', 'Subcategory', 'Orders', 'Employees'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
@@ -182,6 +213,7 @@ export default function MiniDrawer() {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color: '#EEEEEE',
                   }}
                 >
                   {index === 0 && <CategoryIcon />} {/* Category icon */}
