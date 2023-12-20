@@ -91,21 +91,16 @@ async function updateCategory(req, res) {
 //subcategory functions
 
 async function createSubCategory(req, res) {
-    Category.findOne({ name: req.body.categoryName })
-        .then(category => {
-            if (!category) {
-                res.json('Category not found');
-            }
-            else {
-                const displayName = req.body.displayName, name = req.body.name;
-                const newSubCategory = new Subcategory({ displayName, categoryID: category._id, name });
+    try{
+                const displayName = req.body.displayName, name = req.body.name, categoryID = req.body.categoryID;
+                const newSubCategory = new Subcategory({ displayName, categoryID , name });
+                console.log(newSubCategory);
                 newSubCategory.save();
                 res.status(201).json({ Data: { newSubCategory }, Result: { Code: 201, Message: "Subcategory created successfully!", Cause: null } });
             }
-        })
-        .catch(error => {
+        catch{(error) => {
             console.error('could not create category' + " " + error.message);
-        });
+        }};
 }
 
 //deletion of subcategory

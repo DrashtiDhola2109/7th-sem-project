@@ -21,6 +21,7 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import GroupIcon from '@mui/icons-material/Group';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import InsertForm from './insertForm';
+import SubCategoryForm from './subCategoryForm';
 
 const drawerWidth = 240;
 
@@ -115,9 +116,7 @@ export default function MiniDrawer() {
         );
       case 'Subcategory':
         return (
-          <Typography variant="h6" noWrap component="div">
-            Subcategory Content
-          </Typography>
+          <SubCategoryForm />
         );
       case 'Orders':
         return (
@@ -147,7 +146,7 @@ export default function MiniDrawer() {
       case 'Subcategory':
         return (
           <Typography variant="h6" noWrap component="div">
-            Subcategory Content
+            Subcategory
           </Typography>
         );
       case 'Orders':
