@@ -160,18 +160,14 @@ async function getAllSubcategories(req, res) {
 // Update subcategory
 async function updateSubcategory(req, res) {
     const scId = req.params.id;
-    const { displayName, name, categoryName } = req.body;
+    console.log(scId);
+    const { displayName, name, categoryID } = req.body;
     try {
-        // Find the corresponding Category document by categoryName
-        const category = await Category.findOne({ name: categoryName });
-
-        if (!category) {
-            return res.status(404).json({ error: 'Category not found' });
-        }                                                             
+        // Find the corresponding Category document by categoryName                                                       
         // Update the Subcategory with the new values and categoryId
         const updatedSubcategory = await Subcategory.findByIdAndUpdate(
             scId,
-            { displayName, name, categoryID : category._id }, // Update categoryId
+            { displayName, categoryID, name}, // Update categoryId
             { new: true } // This option returns the updated subcategory
         );
 
@@ -182,7 +178,6 @@ async function updateSubcategory(req, res) {
         // Include categoryName in the response
         const responseData = {
             updatedSubcategory,
-            categoryName, // Include the categoryName in the response
         };
 
 
