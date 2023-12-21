@@ -46,6 +46,10 @@ const SubCategoryForm = () => {
   };
 
   const handleCloseEditModal = () => {
+    setSelectedSubCategoryId('');
+    setSelectedSubCategoryDisplayName('');
+    setSelectedSubCategoryName('');
+    setEditCategoryId('');
     setEditModalOpen(false);
   };
 
@@ -110,6 +114,10 @@ const SubCategoryForm = () => {
 
       if (response.ok) {
         console.log('Subcategory added successfully');
+        await getAllSubcategories();
+        setCategoryID('');
+        setSubCategoryName('');
+        setDisplayName('');
         // Handle successful insertion
       } else {
         console.error('Failed to add subcategory');
@@ -159,17 +167,17 @@ const SubCategoryForm = () => {
           <Grid item xs={3}>
             <FormControl fullWidth 
             sx={{
-                '& .MuiInputLabel-root': {
-                  color: '#222831', // Changing input label color
+              '& .MuiInputLabel-root': {
+                color: '#222831', // Changing input label color
+              },
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#222831', // Changing border color when focused
                 },
-                '& .MuiOutlinedInput-root': {
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#222831', // Changing border color when focused
-                  },
-                },
-                width: '100%',
-                // color: '#222831',
-              }}>
+              },
+              width: '100%',
+              // color: '#222831',
+            }}>
               <InputLabel id="category-select-label">Category</InputLabel>
               <Select
                 labelId="category-select-label"
