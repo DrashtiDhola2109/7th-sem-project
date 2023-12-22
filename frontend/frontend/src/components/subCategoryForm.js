@@ -32,6 +32,16 @@ const SubCategoryForm = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedCategoryName, setSelectedSubCategoryName] = useState('');
   const [selectedCategoryDisplayName, setSelectedSubCategoryDisplayName] = useState('');
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+
+  const handleCategoryFilterChange = (event) => {
+    setSelectedCategoryFilter(event.target.value);
+  };
+
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
 
   const handleEdit = (subcategory) => {
     setSelectedSubCategoryId(subcategory._id);
@@ -167,15 +177,14 @@ const SubCategoryForm = () => {
           <Grid item xs={3}>
             <FormControl fullWidth 
             sx={{
-              '& .MuiInputLabel-root': {
-                color: '#222831', // Changing input label color
-              },
+              '& label.Mui-focused': { color: '#222831' },
               '& .MuiOutlinedInput-root': {
                 '&.Mui-focused fieldset': {
                   borderColor: '#222831', // Changing border color when focused
                 },
               },
               width: '100%',
+              textAlign: 'left'
               // color: '#222831',
             }}>
               <InputLabel id="category-select-label">Category</InputLabel>
@@ -254,6 +263,52 @@ const SubCategoryForm = () => {
 
       <Divider variant="middle" sx={{ marginTop: '20px', color : '222831'}} />
 
+      <Grid container spacing={2} alignItems="center" sx={{marginTop: '10px'}}>
+          <Grid item xs={6}>
+          <FormControl fullWidth 
+            sx={{
+              '& label.Mui-focused': { color: '#222831' },
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#222831', // Changing border color when focused
+                },
+              },
+              width: '100%',
+              textAlign: 'left'
+              // color: '#222831',
+            }}>
+              <InputLabel id="category-filter-label">Filter by Category</InputLabel>
+        <Select
+          labelId="category-filter-label"
+          id="category-filter"
+          value={selectedCategoryFilter}
+          label="Filter by Category"
+          onChange={handleCategoryFilterChange}
+        >
+          <MenuItem value="">All Categories</MenuItem>
+          {categoryData.map((category) => (
+            <MenuItem key={category._id} value={category.name}>
+              {category.displayName}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      </Grid>
+
+      <Grid item xs={6}>
+      {/* Add Search Input for Subcategory Name and Display Name */}
+      <TextField
+        label="Search Subcategory"
+        variant="outlined"
+        value={searchInput}
+        onChange={handleSearchInputChange}
+        fullWidth
+      />
+      </Grid>
+      </Grid>
+
+<Divider variant="middle" sx={{ marginTop: '20px', color : '222831'}} />
+
       <TableContainer component={Paper} sx={{ marginTop: '20px' }}>
         <Table>
           <TableHead sx={{ 
@@ -277,8 +332,20 @@ const SubCategoryForm = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {subCategoryData.map((subcategory) => (
-              <TableRow key={subcategory._id}>
+        {subCategoryData
+          .filter((subcategory) =>
+            selectedCategoryFilter
+              ? subcategory.categoryName === selectedCategoryFilter
+              : true
+          )
+          .filter((subcategory) =>
+            searchInput
+              ? subcategory.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+                subcategory.displayName.toLowerCase().includes(searchInput.toLowerCase())
+              : true
+          )
+          .map((subcategory) => (
+            <TableRow key={subcategory._id}>
                 <TableCell>{subcategory.name}</TableCell>
                 <TableCell>{subcategory.displayName}</TableCell>
                 <TableCell>{subcategory.categoryName}</TableCell>
@@ -312,15 +379,14 @@ const SubCategoryForm = () => {
         <FormControl fullWidth 
         margin="normal"
             sx={{
-                '& .MuiInputLabel-root': {
-                  color: '#222831', // Changing input label color
-                },
+              '& label.Mui-focused': { color: '#222831' },
                 '& .MuiOutlinedInput-root': {
                   '&.Mui-focused fieldset': {
                     borderColor: '#222831', // Changing border color when focused
                   },
                 },
                 width: '100%',
+                textAlign: 'left'
                 // color: '#222831',
               }}>
       <InputLabel id="edit-category-select-label">Category</InputLabel>
