@@ -174,21 +174,16 @@ async function updatearea(req, res) {
 //route
 
 async function createRoute(req, res) {
-    Area.findOne({ AreaName: req.body.AreaName})
-        .then(area => {
-            if (!area) {
-                res.json('area not found');
-            }
-            else {
+    try {
                 const RouteName = req.body.RouteName;
-                const newroute = new Route({ RouteName, AreaId: area.id});
+                const AreaId = req.body.AreaId;
+                const newroute = new Route({ RouteName, AreaId});
                 newroute.save();
                 res.status(201).json({ Data: { newroute }, Result: { Code: 201, Message: "route added successfully!", Cause: null } });
             }
-        })
-        .catch(error => {
+        catch(error){
             console.error('could not add route' + " " + error.message);
-        });
+        }
 }
 
 async function deleteroute(req, res) {
@@ -235,15 +230,11 @@ async function getAllRoute(req, res) {
 
 async function updateroute(req, res) {
     const aid = req.params.id;
-    const { RouteName, AreaName } = req.body;
-    try {
-        const area = await Area.findOne({ AreaName: AreaName });
-        if (!area) {
-            return res.status(404).json({ error: 'area not found' });
-        }                                                             
+    const { RouteName, AreaId } = req.body;
+    try {                                                          
         const updateroute = await Route.findByIdAndUpdate(
             aid,
-            { RouteName, AreaId : area._id }, 
+            { RouteName, AreaId }, 
             { new: true } 
         );
         if (!updateroute) {
@@ -251,8 +242,7 @@ async function updateroute(req, res) {
         }
         // Include categoryName in the response
         const responseData = {
-            updateroute,
-            AreaName, // Include the categoryName in the response
+            updateroute
         };
 
 

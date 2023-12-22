@@ -27,6 +27,10 @@ import MyLocationIcon from '@mui/icons-material/MyLocation';
 import PlaceIcon from '@mui/icons-material/Place';
 import ZoneForm from './Zone';
 import Area from './Area';
+import RouteForm from './Route';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import UserRegistrationForm from './userRegistrationForm';
+import UserTable from './userData';
 
 const drawerWidth = 240;
 
@@ -131,23 +135,23 @@ export default function MiniDrawer() {
         return (
           <Area />
         );
-        // case 'Route':
-        // return (
-        //   <Typography variant="h6" noWrap component="div">
-        //     Route Content
-        //   </Typography>
-        // );
+        case 'Route':
+        return (
+          <RouteForm />
+        );
+        case 'Add User':
+        return (
+          <UserRegistrationForm />
+        );
       case 'Orders':
         return (
           <Typography variant="h6" noWrap component="div">
             Orders Content
           </Typography>
         );
-      case 'Employees':
+      case 'Users':
         return (
-          <Typography variant="h6" noWrap component="div">
-            Employees Content
-          </Typography>
+          <UserTable />
         );
       default:
         return null;
@@ -180,22 +184,28 @@ export default function MiniDrawer() {
             Area
           </Typography>
         );
-        // case 'Route':
-        // return (
-        //   <Typography variant="h6" noWrap component="div">
-        //     Route
-        //   </Typography>
-        // );
+        case 'Route':
+        return (
+          <Typography variant="h6" noWrap component="div">
+            Route
+          </Typography>
+        );
+        case 'Add User':
+        return (
+          <Typography variant="h6" noWrap component="div">
+            Add User
+          </Typography>
+        );
       case 'Orders':
         return (
           <Typography variant="h6" noWrap component="div">
             Orders Content
           </Typography>
         );
-      case 'Employees':
+      case 'Users':
         return (
           <Typography variant="h6" noWrap component="div">
-            Employees Content
+            Users
           </Typography>
         );
       default:
@@ -234,7 +244,7 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List sx={{ backgroundColor: '#2D4059',color: '#EEEEEE',}}>
-          {['Category', 'Subcategory', 'Zone', 'Area', 'Route', 'Orders', 'Employees'].map((text, index) => (
+          {['Category', 'Subcategory', 'Zone', 'Area', 'Route', 'Orders', 'Users', 'Add User'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
@@ -259,6 +269,7 @@ export default function MiniDrawer() {
           {index === 4 && <RouteIcon />}
           {index === 5 && <ReceiptIcon />}
           {index === 6 && <GroupIcon />}
+          {index === 7 && <PersonAddAltRoundedIcon />}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>

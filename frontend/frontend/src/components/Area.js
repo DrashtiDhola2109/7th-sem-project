@@ -234,7 +234,7 @@ const Area = () => {
 
 
       <Grid container spacing={2} alignItems="center" sx={{ marginTop: '10px' }}>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <FormControl fullWidth
           sx={{
             '& label.Mui-focused': { color: '#222831' },
@@ -264,7 +264,7 @@ const Area = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <TextField
             label="Search Area Name"
             variant="outlined"
