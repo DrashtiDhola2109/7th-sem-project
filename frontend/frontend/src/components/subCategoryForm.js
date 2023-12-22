@@ -135,6 +135,22 @@ const SubCategoryForm = () => {
     }
   };
 
+  const handleDelete = async (categoryId, index) => {
+    try {
+      const response = await fetch(`/subcategories/${categoryId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        await getAllSubcategories();
+      } else {
+        console.error('Failed to delete category');
+      }
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
     getAllSubcategories();
@@ -372,7 +388,7 @@ const SubCategoryForm = () => {
         Edit
       </TableCell>
       <TableCell>
-        <IconButton >
+        <IconButton onClick={() => handleDelete(subcategory._id)}>
           <DeleteIcon sx={{ color: 'red' }} align="center" />
         </IconButton>
         Delete

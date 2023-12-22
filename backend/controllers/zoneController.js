@@ -2,6 +2,7 @@
 const { Zone, Area,Route } = require('../models/Zoneschema');
 
 async function createZone(req, res) {
+    console.log('in');
     const zoneName = req.body.zoneName;
     //const zoneId=req.body.zoneId;
     const newZone = new Zone({ zoneName });
@@ -83,23 +84,17 @@ async function updateZone(req, res) {
   //Area
 
   async function CreateArea(req, res) {
-    
-    Zone.findOne({ zoneName: req.body.zoneName })
-        .then(zone => {
-            if (!zone) {
-                res.json('zone not found');
-            }
-            else {
+    try{
                 const AreaName = req.body.AreaName;
+                const zoneId = req.body.ZoneId;
                 //const AreaId = req.body.AreaId;
-                const newarea = new Area({ AreaName, zoneId: zone.id});
+                const newarea = new Area({ AreaName, zoneId});
                 newarea.save();
                 res.status(201).json({ Data: { newarea }, Result: { Code: 201, Message: "area added successfully!", Cause: null } });
             }
-        })
-        .catch(error => {
+        catch(error){
             console.error('could not add area' + " " + error.message);
-        });
+        };
 }
 
 async function deletearea(req, res) {
@@ -146,20 +141,13 @@ async function getAllArea(req, res) {
 
 async function updatearea(req, res) {
     const aid = req.params.id;
-    const { AreaName, zoneName } = req.body;
-
-    console.log(AreaName,zoneName);
+    const { AreaName, zoneId } = req.body;
+    console.log(req.body);
 
     try {
-        const zone = await Zone.findOne({ zoneName: zoneName });
-
-        if (!zone) {
-            return res.status(404).json({ error: 'zone not found' });
-        }                                                             
-
         const updatearea = await Area.findByIdAndUpdate(
             aid,
-            { AreaName, zoneId : zone._id }, 
+            { AreaName, zoneId }, 
             { new: true } 
         );
 
@@ -169,8 +157,7 @@ async function updatearea(req, res) {
 
         // Include categoryName in the response
         const responseData = {
-            updatearea,
-            zoneName, // Include the categoryName in the response
+            updatearea
         };
 
 
