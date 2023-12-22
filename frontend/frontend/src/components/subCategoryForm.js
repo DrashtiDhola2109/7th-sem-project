@@ -50,7 +50,6 @@ const SubCategoryForm = () => {
     const selectedCategory = categoryData.find(category => category.name === subcategory.categoryName);
     const selecetdCategoryId = selectedCategory._id;
     setEditCategoryId(selecetdCategoryId);
-    console.log(editCategoryId)
 
     setEditModalOpen(true);
   };
@@ -66,7 +65,6 @@ const SubCategoryForm = () => {
   const handleSubmitEdit = async () => {
     // Make a fetch request to update the subcategory using the updateSubcategory function
     try {
-      console.log('Updating');
       const response = await fetch(`/subcategories/${selectedSubCategoryId}`, {
         method: 'PUT',
         headers: {
@@ -300,6 +298,18 @@ const SubCategoryForm = () => {
       <TextField
         label="Search Subcategory"
         variant="outlined"
+        InputLabelProps={{
+          style: { color: '#2D4059' }
+        }}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#222831', // Changing border color when focused
+            },
+          },
+          width: '100%',
+          color: '#222831',
+        }}
         value={searchInput}
         onChange={handleSearchInputChange}
         fullWidth
@@ -345,14 +355,19 @@ const SubCategoryForm = () => {
               : true
           )
           .map((subcategory) => (
-            <TableRow key={subcategory._id}>
+            <TableRow key={subcategory._id}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#B2C8DF',
+              },
+            }}>
                 <TableCell>{subcategory.name}</TableCell>
                 <TableCell>{subcategory.displayName}</TableCell>
                 <TableCell>{subcategory.categoryName}</TableCell>
                 {/* Add more table cells with corresponding data */}
                 <TableCell>
-        <IconButton >
-          <EditIcon sx={{ color: 'green' }} align="center" onClick={() => handleEdit(subcategory)} />
+        <IconButton onClick={() => handleEdit(subcategory)}>
+          <EditIcon sx={{ color: 'green' }} align="center" />
         </IconButton>
         Edit
       </TableCell>

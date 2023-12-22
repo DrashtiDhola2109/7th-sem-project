@@ -238,7 +238,12 @@ const InsertForm = () => {
           </TableHead>
           <TableBody>
   {filteredData.map((category, index) => (
-    <TableRow key={category._id}>
+    <TableRow key={category._id}
+    sx={{
+      '&:hover': {
+        backgroundColor: '#B2C8DF',
+      },
+    }}>
       <TableCell>{category.name}</TableCell>
       <TableCell>{category.displayName}</TableCell>
       <TableCell>
