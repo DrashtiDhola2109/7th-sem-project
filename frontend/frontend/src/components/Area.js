@@ -32,6 +32,10 @@ const Area = () => {
         setEditModalOpen(true);
       };
 
+      const handleCloseEditModal = () => {
+        setEditModalOpen(false);
+      };
+
       const handleSaveEdit = async () => {
         try {
           const response = await fetch(`/area/${editAreaId}`, {
@@ -50,7 +54,7 @@ const Area = () => {
             // handle success scenario
             console.log('Area updated successfully');
             fetchAreas();
-            setEditModalOpen(false); // Close the modal after successful update
+            handleCloseEditModal(); // Close the modal after successful update
             // Fetch updated areas or update the local state to reflect the changes
           } else {
             console.error('Failed to update area');
@@ -344,7 +348,7 @@ const Area = () => {
 
       {/* Edit Modal */}
       {/* Edit Modal */}
-      <Dialog open={editModalOpen}>
+      <Dialog open={editModalOpen} onClose={handleCloseEditModal}>
         <DialogTitle>Edit Area</DialogTitle>
         <DialogContent>
           <FormControl fullWidth margin="normal">
@@ -386,7 +390,7 @@ const Area = () => {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => {}}
+            onClick={handleCloseEditModal}
             variant="contained"
             sx={{ backgroundColor: '#222831', width: '100%', '&:hover': { backgroundColor: '#2D4059' } }}
           >

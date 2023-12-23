@@ -358,7 +358,7 @@ const RouteForm = () => {
       <Dialog open={editModalOpen} onClose={handleCloseEditModal}>
         <DialogTitle>Edit Route</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth>
+          <FormControl fullWidth margin="normal">
             <InputLabel id="edit-area-select-label">Area</InputLabel>
             <Select
               labelId="edit-area-select-label"
@@ -378,14 +378,27 @@ const RouteForm = () => {
           <TextField
             label="Route Name"
             variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: { color: '#2D4059' },
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#222831',
+                },
+              },
+              width: '100%',
+              color: '#222831',
+            }}
             value={editRouteName}
             onChange={(event) => setEditRouteName(event.target.value)}
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseEditModal}>Cancel</Button>
-          <Button variant="contained" onClick={handleSaveEdit}>
+          <Button variant="contained" onClick={handleCloseEditModal} sx={{ backgroundColor: '#222831', width: '100%', '&:hover': { backgroundColor: '#2D4059' } }}>Cancel</Button>
+          <Button variant="contained" onClick={handleSaveEdit} sx={{ backgroundColor: '#222831', width: '100%', '&:hover': { backgroundColor: '#2D4059' } }}>
             Save
           </Button>
         </DialogActions>

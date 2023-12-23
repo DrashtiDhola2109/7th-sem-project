@@ -33,7 +33,17 @@ const UserTable = () => {
   return (
     <TableContainer component={Paper}>
       <Table>
-        <TableHead>
+        <TableHead sx={{ 
+                backgroundColor: '#222831', 
+                color: '#EEEEEE', // Text color of the table header
+  '& th': {
+    color: '#EEEEEE', // Text color of the table cells within the header
+  },
+                width: '100%', 
+                '&:hover': {
+                  backgroundColor: '#2D4059', // Changing color on hover
+                },
+                }}>
           <TableRow>
             
             <TableCell>User Name</TableCell>
@@ -46,7 +56,11 @@ const UserTable = () => {
         </TableHead>
         <TableBody>
           {users.map((user) => (
-            <TableRow key={user._id}>
+            <TableRow key={user._id} sx={{
+              '&:hover': {
+                backgroundColor: '#B2C8DF',
+              },
+            }}>
               
               <TableCell>{user.userName}</TableCell>
               <TableCell>{user.userMail}</TableCell>
