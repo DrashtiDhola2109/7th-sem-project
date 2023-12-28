@@ -56,5 +56,29 @@ router.put('/order/:id',usercontroller.updateOrder);
 router.get('/order',usercontroller.getAllOrders);
 
 
+router.post('/addshop',usercontroller.createShop);
+router.delete('/shop/:id',usercontroller.deleteShop);
+router.put('/shop/:id',usercontroller.updateShop);
+router.get('/shop',usercontroller.getShops);
+
+router.post('/adduser',usercontroller.createUser);
+router.delete('/user/:id',usercontroller.deleteUser);
+router.put('/user/:id',usercontroller.updateUser);
+router.get('/user',usercontroller.getUsers);
+
+router.post('/addproduct',usercontroller.createProduct);
+router.delete('/product/:id',usercontroller.deleteProduct);
+router.put('/product/:id',usercontroller.updateProduct);
+router.get('/product',usercontroller.getProducts);
+
+router.post('/addorderitem',usercontroller.createOrderItem);
+router.delete('/orderitem/:id',usercontroller.deleteOrderItem);
+router.get('/orderitem',usercontroller.getAllOrderItems);
+
+router.post('/addorder',usercontroller.createOrder);
+router.delete('/order/:id',usercontroller.deleteOrder);
+router.put('/order/:id',usercontroller.updateOrder);
+router.get('/order',usercontroller.getAllOrders);
+
 
 module.exports = router;

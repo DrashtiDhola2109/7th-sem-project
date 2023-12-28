@@ -218,7 +218,18 @@ const InsertForm = () => {
 
       <TableContainer component={Paper} sx={{ marginTop: '20px' }}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ 
+                backgroundColor: '#222831', 
+                color: '#EEEEEE', // Text color of the table header
+  '& th': {
+    color: '#EEEEEE', // Text color of the table cells within the header
+  },
+                width: '100%', 
+                '&:hover': {
+                  backgroundColor: '#2D4059', // Changing color on hover
+                },
+                }}
+            >
             <TableRow>
               <TableCell>Category Name</TableCell>
               <TableCell>Display Name</TableCell>
@@ -227,7 +238,12 @@ const InsertForm = () => {
           </TableHead>
           <TableBody>
   {filteredData.map((category, index) => (
-    <TableRow key={category._id}>
+    <TableRow key={category._id}
+    sx={{
+      '&:hover': {
+        backgroundColor: '#B2C8DF',
+      },
+    }}>
       <TableCell>{category.name}</TableCell>
       <TableCell>{category.displayName}</TableCell>
       <TableCell>
